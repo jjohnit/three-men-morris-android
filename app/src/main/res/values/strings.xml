@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">project_4</string>
+    <string name="str_startGame">Start Game</string>
 </resources>
