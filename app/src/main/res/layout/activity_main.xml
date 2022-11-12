@@ -12,34 +12,34 @@
         android:id="@+id/v_line_3"
         android:layout_width="300dp"
         android:layout_height="10dp"
-        android:background="@color/black"
+        android:background="@color/material_dynamic_primary40"
         android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.535" />
+        app:layout_constraintVertical_bias="0.489" />
 
     <View
         android:id="@+id/v_line_1"
         android:layout_width="300dp"
         android:layout_height="10dp"
         android:layout_marginTop="96dp"
-        android:background="@color/black"
+        android:background="@color/material_dynamic_primary40"
         android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/v_line_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.146" />
 
     <View
         android:id="@+id/v_line_2"
         android:layout_width="300dp"
         android:layout_height="10dp"
-        android:background="@color/black"
+        android:background="@color/material_dynamic_primary40"
         android:elevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/v_line_3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,20 +51,20 @@
         android:id="@+id/h_line_1"
         android:layout_width="10dp"
         android:layout_height="300dp"
-        android:background="@color/black"
+        android:background="@color/material_dynamic_primary40"
         android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.222" />
+        app:layout_constraintVertical_bias="0.225" />
 
     <View
         android:id="@+id/h_line_2"
         android:layout_width="10dp"
         android:layout_height="300dp"
-        android:background="@color/black"
+        android:background="@color/material_dynamic_primary40"
         android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,25 +77,27 @@
         android:id="@+id/h_line_3"
         android:layout_width="10dp"
         android:layout_height="300dp"
-        android:background="@color/black"
+        android:background="@color/material_dynamic_primary40"
         android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.862"
+        app:layout_constraintHorizontal_bias="0.877"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.222" />
+        app:layout_constraintVertical_bias="0.225" />
 
     <Button
         android:id="@+id/btn_startGame"
         android:layout_width="218dp"
         android:layout_height="60dp"
-        android:text="@string/str_startGame"
         android:onClick="onClickStartGame"
+        android:text="@string/str_startGame"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/h_line_2" />
+        app:layout_constraintTop_toBottomOf="@+id/h_line_2"
+        app:layout_constraintVertical_bias="0.189" />
 
     <ImageView
         android:id="@+id/piece_21"
@@ -107,8 +109,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.536"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <ImageView
         android:id="@+id/piece_11"
@@ -120,8 +121,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.314"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.289" />
 
     <ImageView
         android:id="@+id/piece_01"
@@ -133,8 +133,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.107"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.121" />
 
     <ImageView
         android:id="@+id/piece_22"
@@ -143,11 +142,10 @@
         android:contentDescription="Piece"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintHorizontal_bias="0.915"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.536"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <ImageView
         android:id="@+id/piece_10"
@@ -156,11 +154,10 @@
         android:contentDescription="Piece"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintHorizontal_bias="0.081"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.314"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.289" />
 
     <ImageView
         android:id="@+id/piece_00"
@@ -169,11 +166,10 @@
         android:contentDescription="Piece"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintHorizontal_bias="0.081"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.107"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.122" />
 
     <ImageView
         android:id="@+id/piece_20"
@@ -183,11 +179,10 @@
         android:elevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintHorizontal_bias="0.081"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.536"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <ImageView
         android:id="@+id/piece_12"
@@ -197,11 +192,10 @@
         android:elevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintHorizontal_bias="0.918"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.314"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.289" />
 
     <ImageView
         android:id="@+id/piece_02"
@@ -211,9 +205,63 @@
         android:elevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.897"
+        app:layout_constraintHorizontal_bias="0.918"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.107"
-        app:srcCompat="@android:drawable/ic_delete" />
+        app:layout_constraintVertical_bias="0.121" />
+
+    <TableLayout
+        android:id="@+id/strategy_desc_table"
+        android:layout_width="407dp"
+        android:layout_height="144dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_startGame">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAlignBottom="false"
+                android:textAlignment="viewStart"
+                app:srcCompat="@drawable/plus_icon" />
+
+            <TextView
+                android:id="@+id/p1_strategy_text"
+                android:layout_width="307dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Player 1 uses strategy - Offensive"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="99dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/cross_icon" />
+
+            <TextView
+                android:id="@+id/p2_strategy_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Player 2 uses strategy - Random"
+                android:textSize="20sp" />
+        </TableRow>
+
+    </TableLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
     final int START_PLAYER_1 = 1;
     int playerWon = 0;
 
+    ImageView piece00, piece01, piece02, piece10, piece11, piece12,
+            piece20, piece21, piece22;
+    ImageView[][] imageBoard;
+
     // Status of the board. 0 means Empty, 1 means player 1, 2 means player 2
     public int[][] boardStatus;
     // Keep track of the moves to stop game at 10 moves
@@ -31,6 +37,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        piece00 = findViewById(R.id.piece_00);
+        piece01 = findViewById(R.id.piece_01);
+        piece02 = findViewById(R.id.piece_02);
+        piece10 = findViewById(R.id.piece_10);
+        piece11 = findViewById(R.id.piece_11);
+        piece12 = findViewById(R.id.piece_12);
+        piece20 = findViewById(R.id.piece_20);
+        piece21 = findViewById(R.id.piece_21);
+        piece22 = findViewById(R.id.piece_22);
+
+        imageBoard = new ImageView[][] {{piece00, piece01, piece02}, {piece10, piece11, piece12},
+                {piece20, piece21, piece22}};
 
         mHandler = new Handler(getMainLooper()){
             @Override
@@ -86,19 +105,26 @@ public class MainActivity extends AppCompatActivity {
 
         movesCounter = 0;
         // Randomly selects the strategy to be used by the players
+        TextView p1StrategyText = findViewById(R.id.p1_strategy_text);
+        TextView p2StrategyText = findViewById(R.id.p2_strategy_text);
         Random randomGenerator = new Random();
         if (randomGenerator.nextInt(2) == 0){
             p1Strategy = new StrategyOffensive(1);
+            p1StrategyText.setText("Player 1 uses strategy - Offensive");
             Log.i("appDebug", "Player 1 uses strategy - Offensive");
             p2Strategy = new StrategyRandom(2);
+            p2StrategyText.setText("Player 2 uses strategy - Random");
             Log.i("appDebug", "Player 2 uses strategy - Random");
         }
         else {
             p1Strategy = new StrategyRandom(1);
+            p1StrategyText.setText("Player 1 uses strategy - Random");
             Log.i("appDebug", "Player 1 uses strategy - Random");
             p2Strategy = new StrategyOffensive(2);
+            p1StrategyText.setText("Player 1 uses strategy - Offensive");
             Log.i("appDebug", "Player 2 uses strategy - Offensive");
         }
+        findViewById(R.id.strategy_desc_table).setVisibility(View.VISIBLE);
         // Starts the game by calling the first player
         player1.p1Handler.post((Runnable) p1Strategy);
     }
@@ -145,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -210,8 +236,8 @@ public class MainActivity extends AppCompatActivity {
 
                     if (boardUpdatedFlag){
                         msg = mHandler.obtainMessage(player);
-                            mHandler.sendMessage(msg);
-                            return;
+                        mHandler.sendMessage(msg);
+                        return;
                     }
 
                     // Check the adjacent column for free position
@@ -275,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
                                 List<Integer[]> positionToRemove = new ArrayList<>(existingPieces);
                                 positionToRemove.remove(existingPieces.get(i));
                                 positionToRemove.remove(existingPieces.get(j));
-                                boardStatus[existingPieces.get(0)[0]][existingPieces.get(0)[1]] = 0;
+                                boardStatus[positionToRemove.get(0)[0]][positionToRemove.get(0)[1]] = 0;
                                 msg = mHandler.obtainMessage(player);
                                 mHandler.sendMessage(msg);
                                 return;
@@ -327,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -355,10 +381,21 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             // Update the UI
-            Log.i("appDebug", "Move " + movesCounter +" Board : ");
-            Log.i("appDebug", boardStatus[0][0] + " " + boardStatus[0][1] + " " + boardStatus[0][2] + " "
-                    + boardStatus[1][0] + " " + boardStatus[1][1] + " " + boardStatus[1][2] + " "
-                    + boardStatus[2][0] + " " + boardStatus[2][1] + " " + boardStatus[2][2]);
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (boardStatus[i][j] == 0){
+                        imageBoard[i][j].setVisibility(View.INVISIBLE);
+                    }
+                    else if (boardStatus[i][j] == 1){
+                        imageBoard[i][j].setImageResource(R.drawable.plus_icon);
+                        imageBoard[i][j].setVisibility(View.VISIBLE);
+                    }
+                    else if (boardStatus[i][j] == 2){
+                        imageBoard[i][j].setImageResource(R.drawable.cross_icon);
+                        imageBoard[i][j].setVisibility(View.VISIBLE);
+                    }
+                }
+            }
             // Check for win conditions
             if (isPlayerWon()){
                 Log.i("appDebug", "Player " + playerWon +" won");
