@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             p1StrategyText.setText("Player 1 uses strategy - Random");
             Log.i("appDebug", "Player 1 uses strategy - Random");
             p2Strategy = new StrategyOffensive(2);
-            p1StrategyText.setText("Player 1 uses strategy - Offensive");
+            p2StrategyText.setText("Player 2 uses strategy - Offensive");
             Log.i("appDebug", "Player 2 uses strategy - Offensive");
         }
         findViewById(R.id.strategy_desc_table).setVisibility(View.VISIBLE);
@@ -359,18 +359,35 @@ public class MainActivity extends AppCompatActivity {
             }
             Random randomGenerator = new Random();
 
+            List<Integer[]> possibleMoves = new ArrayList<Integer[]>();
+            List<Integer[]> existingPieces = new ArrayList<Integer[]>();
+            int piecesInBoard = 0;
+            int index;
+
+            // Check whether pieces are available or need to replace existing in the board.
+            for (int i = 0; i < boardStatus.length; i++) {
+                for (int j = 0; j < boardStatus[i].length; j++) {
+                    if(boardStatus[i][j] == player){
+                        piecesInBoard++;
+                        existingPieces.add(new Integer[]{i, j});
+                    }
+                    else if (boardStatus[i][j] == 0)
+                        possibleMoves.add(new Integer[]{i,j});
+                }
+            }
+
             // Only one thread should modify the board at a time.
             synchronized (boardStatus){
-                while (true){
-                    int row = randomGenerator.nextInt(3);
-                    int col = randomGenerator.nextInt(3);
-                    if (boardStatus[row][col] == 0){
-                        boardStatus[row][col] = player;
-                        msg = mHandler.obtainMessage(player);
-                        mHandler.sendMessage(msg);
-                        return;
-                    }
+                // If there's already 3 pieces in the board, remove one
+                if (piecesInBoard >= 3){
+                    index = randomGenerator.nextInt(existingPieces.toArray().length);
+                    boardStatus[existingPieces.get(index)[0]][existingPieces.get(index)[1]] = 0;
                 }
+                index = randomGenerator.nextInt(possibleMoves.toArray().length);
+                boardStatus[possibleMoves.get(index)[0]][possibleMoves.get(index)[1]] = player;
+                msg = mHandler.obtainMessage(player);
+                mHandler.sendMessage(msg);
+                return;
             }
         }
     }
