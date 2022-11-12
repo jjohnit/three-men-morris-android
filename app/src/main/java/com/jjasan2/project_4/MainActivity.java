@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     int playerWon = 0;
 
     // Status of the board. 0 means Empty, 1 means player 1, 2 means player 2
-    public int[][] boardStatus = {{0,0,0},{0,0,0},{0,0,0}};
+    public int[][] boardStatus;
     // Keep track of the moves to stop game at 10 moves
     int movesCounter = 0;
 
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             if(player1.p1Handler != null && player2.p2Handler != null)
                 break;
         }
+        boardStatus = new int[][] {{0,0,0},{0,0,0},{0,0,0}};
         startGame();
     }
 
@@ -331,15 +332,19 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Random randomGenerator = new Random();
-            int row = randomGenerator.nextInt(3);
-            int col = randomGenerator.nextInt(3);
 
             // Only one thread should modify the board at a time.
             synchronized (boardStatus){
-                boardStatus[row][col] = player;
-                msg = mHandler.obtainMessage(player);
-                mHandler.sendMessage(msg);
-                return;
+                while (true){
+                    int row = randomGenerator.nextInt(3);
+                    int col = randomGenerator.nextInt(3);
+                    if (boardStatus[row][col] == 0){
+                        boardStatus[row][col] = player;
+                        msg = mHandler.obtainMessage(player);
+                        mHandler.sendMessage(msg);
+                        return;
+                    }
+                }
             }
         }
     }
@@ -355,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
                     + boardStatus[1][0] + " " + boardStatus[1][1] + " " + boardStatus[1][2] + " "
                     + boardStatus[2][0] + " " + boardStatus[2][1] + " " + boardStatus[2][2]);
             // Check for win conditions
-            if (isPlayerWon() || movesCounter > 12){
+            if (isPlayerWon()){
                 Log.i("appDebug", "Player " + playerWon +" won");
             }
         }
