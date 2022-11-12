@@ -18,10 +18,12 @@ public class Player1Thread extends Thread{
         }
 
         p1Handler = new Handler(Looper.myLooper()) {
+            // Handle message stops the thread.
             @Override
             public void handleMessage(@NonNull Message msg) {
+                Looper.myLooper().quit();
                 currentThread().interrupt();
-                Log.i("appDebug", "Player 1 Handle message");
+                Log.i("appDebug", "Player 1 stopped");
             }
         };
         Log.i("appDebug", "Player 1 running");

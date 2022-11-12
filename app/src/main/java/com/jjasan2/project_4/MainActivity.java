@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     Player1Thread player1;
     Player2Thread player2;
     Strategy p1Strategy, p2Strategy;
+    final int START_PLAYER_1 = 1;
+    int playerWon = 0;
 
     // Status of the board. 0 means Empty, 1 means player 1, 2 means player 2
     public int[][] boardStatus = {{0,0,0},{0,0,0},{0,0,0}};
@@ -36,23 +38,18 @@ public class MainActivity extends AppCompatActivity {
                 // When player 1 completes a move, update the UI, check for win condition,
                 // run the next player
                 mHandler.post(new UpdateBoard());
-                if(isPlayerWon() || movesCounter > 12){
-                    // End game and display message
-                    Log.i("appDebug", "Player " + msg.what + " won");
-                    player1.interrupt();
-                    player2.interrupt();
-                    player1 = new Player1Thread();
-                    player2 = new Player2Thread();
-                    player1.start();
-                    player2.start();
-                    movesCounter = 0;
+                // Stops the game when one player wins the game or there is tie
+                // Tie if the no one wins after 12 moves.
+                if(!isPlayerWon() && movesCounter <= 12){
+                    if (msg.what == START_PLAYER_1){
+                        player2.p2Handler.post((Runnable) p2Strategy);
+                    }
+                    else {
+                        player1.p1Handler.post((Runnable) p1Strategy);
+                    }
                 }
-                else if (msg.what == 1){
-                    player2.p2Handler.post((Runnable) p2Strategy);
-                }
-                else {
-                    player1.p1Handler.post((Runnable) p1Strategy);
-                }
+                else
+                    playerWon = msg.what;
                 return;
             }
         };
@@ -84,25 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Method to start the game between the players
     protected void startGame(){
-//        Handler firstPlayer, secondPlayer;
-
-        // Randomly selects the first player to start the game.\
-//        Random randomNumber = new Random();
-//        if(randomNumber.nextInt(2) == 0) {
-//            firstPlayer = player1.p1Handler;
-//            secondPlayer = player2.p2Handler;
-//        }
-//        else{
-//            firstPlayer = player2.p2Handler;
-//            secondPlayer = player1.p1Handler;
-//        }
-
-//        while (!gameOver && movesCounter <= 12) {
-//            firstPlayer.post(new StrategyOffensive(1));
-//            secondPlayer.post(new StrategyOffensive(2));
-//            movesCounter++;
-//        }
-//        gameOver = false;
 
         movesCounter = 0;
         // Randomly selects the strategy to be used by the players
@@ -110,21 +88,15 @@ public class MainActivity extends AppCompatActivity {
         if (randomGenerator.nextInt(2) == 0){
             p1Strategy = new StrategyOffensive(1);
             Log.i("appDebug", "Player 1 uses strategy - Offensive");
+            p2Strategy = new StrategyRandom(2);
+            Log.i("appDebug", "Player 2 uses strategy - Random");
         }
         else {
             p1Strategy = new StrategyRandom(1);
             Log.i("appDebug", "Player 1 uses strategy - Random");
-        }
-        if (randomGenerator.nextInt(2) == 0){
             p2Strategy = new StrategyOffensive(2);
             Log.i("appDebug", "Player 2 uses strategy - Offensive");
         }
-        else {
-            p2Strategy = new StrategyRandom(2);
-            Log.i("appDebug", "Player 2 uses strategy - Random");
-        }
-//        p1Strategy = new StrategyRandom(1);
-//        p2Strategy = new StrategyRandom(2);
         // Starts the game by calling the first player
         player1.p1Handler.post((Runnable) p1Strategy);
     }
@@ -315,12 +287,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            // Check for win conditions
             // Update the UI
             Log.i("appDebug", "Move " + movesCounter +" Board : ");
             Log.i("appDebug", boardStatus[0][0] + " " + boardStatus[0][1] + " " + boardStatus[0][2] + " "
                     + boardStatus[1][0] + " " + boardStatus[1][1] + " " + boardStatus[1][2] + " "
                     + boardStatus[2][0] + " " + boardStatus[2][1] + " " + boardStatus[2][2]);
+            // Check for win conditions
+            if (isPlayerWon() || movesCounter > 12){
+                Log.i("appDebug", playerWon +" won");
+            }
         }
     }
 }
