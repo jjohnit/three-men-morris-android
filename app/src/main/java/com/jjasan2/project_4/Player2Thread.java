@@ -23,8 +23,7 @@ public class Player2Thread extends Thread{
                 Log.i("appDebug", "Player 2 Handle message");
             }
         };
+        Log.i("appDebug", "Player 2 running");
         Looper.loop();
-
-        Log.i("appDebug", "Player 2 run");
     }
 }
