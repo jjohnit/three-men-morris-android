@@ -264,4 +264,22 @@
 
     </TableLayout>
 
+    <TextView
+        android:id="@+id/win_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#AEFFC107"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text="Player 1 Won"
+        android:textColor="#000000"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.281" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

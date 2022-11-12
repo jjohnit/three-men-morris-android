@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView piece00, piece01, piece02, piece10, piece11, piece12,
             piece20, piece21, piece22;
     ImageView[][] imageBoard;
+    TextView winText;
 
     // Status of the board. 0 means Empty, 1 means player 1, 2 means player 2
     public int[][] boardStatus;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         piece20 = findViewById(R.id.piece_20);
         piece21 = findViewById(R.id.piece_21);
         piece22 = findViewById(R.id.piece_22);
+
+        winText = findViewById(R.id.win_text);
 
         imageBoard = new ImageView[][] {{piece00, piece01, piece02}, {piece10, piece11, piece12},
                 {piece20, piece21, piece22}};
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
             p2StrategyText.setText("Player 2 uses strategy - Offensive");
             Log.i("appDebug", "Player 2 uses strategy - Offensive");
         }
+        winText.setVisibility(View.INVISIBLE);
         findViewById(R.id.strategy_desc_table).setVisibility(View.VISIBLE);
         // Starts the game by calling the first player
         player1.p1Handler.post((Runnable) p1Strategy);
@@ -415,7 +419,13 @@ public class MainActivity extends AppCompatActivity {
             }
             // Check for win conditions
             if (isPlayerWon()){
+                winText.setText("Player " + playerWon+ " Won");
+                winText.setVisibility(View.VISIBLE);
                 Log.i("appDebug", "Player " + playerWon +" won");
+            }
+            else if (movesCounter > 12){
+                winText.setText("Game is Tie");
+                winText.setVisibility(View.VISIBLE);
             }
         }
     }
