@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Strategy p1Strategy, p2Strategy;
     final int START_PLAYER_1 = 1;
     int playerWon = 0;
+    int currentGame = 0;
 
     ImageView piece00, piece01, piece02, piece10, piece11, piece12,
             piece20, piece21, piece22;
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler(getMainLooper()){
             @Override
             public void handleMessage(@NonNull Message msg) {
+                // Check whether the message is from a valid thread
+                if(msg.arg1 != currentGame)
+                    return;
                 // When player 1 completes a move, update the UI, check for win condition,
                 // run the next player
                 movesCounter++;
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         player1.p1Handler.post((Runnable) p1Strategy);
                     }
                 }
-                else
+                else if(isPlayerWon())
                     playerWon = msg.what;
                 return;
             }
@@ -83,11 +87,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method called on clicking the 'Start Game' button in UI
-    public void onClickStartGame(View view) {
+    public void onClickStartGame(View view) throws InterruptedException {
+        currentGame++;
+        boardStatus = new int[][] {{0,0,0},{0,0,0},{0,0,0}};
+        new UpdateBoard();
         // Stop the threads and restart if they are already running
         if(player1.isAlive() || player2.isAlive()){
-            player1.interrupt();
-            player2.interrupt();
+            // Send message to interrupt the threads and clear the queue.
+            player1.p1Handler.sendMessage(Message.obtain());
+            player2.p2Handler.sendMessage(Message.obtain());
             player1 = new Player1Thread();
             player2 = new Player2Thread();
             player1.start();
@@ -99,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
             if(player1.p1Handler != null && player2.p2Handler != null)
                 break;
         }
-        boardStatus = new int[][] {{0,0,0},{0,0,0},{0,0,0}};
         startGame();
     }
 
@@ -112,18 +119,18 @@ public class MainActivity extends AppCompatActivity {
         TextView p2StrategyText = findViewById(R.id.p2_strategy_text);
         Random randomGenerator = new Random();
         if (randomGenerator.nextInt(2) == 0){
-            p1Strategy = new StrategyOffensive(1);
+            p1Strategy = new StrategyOffensive(1, currentGame);
             p1StrategyText.setText("Player 1 uses strategy - Offensive");
             Log.i("appDebug", "Player 1 uses strategy - Offensive");
-            p2Strategy = new StrategyRandom(2);
+            p2Strategy = new StrategyRandom(2, currentGame);
             p2StrategyText.setText("Player 2 uses strategy - Random");
             Log.i("appDebug", "Player 2 uses strategy - Random");
         }
         else {
-            p1Strategy = new StrategyRandom(1);
+            p1Strategy = new StrategyRandom(1, currentGame);
             p1StrategyText.setText("Player 1 uses strategy - Random");
             Log.i("appDebug", "Player 1 uses strategy - Random");
-            p2Strategy = new StrategyOffensive(2);
+            p2Strategy = new StrategyOffensive(2, currentGame);
             p2StrategyText.setText("Player 2 uses strategy - Offensive");
             Log.i("appDebug", "Player 2 uses strategy - Offensive");
         }
@@ -156,10 +163,12 @@ public class MainActivity extends AppCompatActivity {
     public class Strategy {
 
         int player;
+        int currentGame;
         Message msg = mHandler.obtainMessage(player);
 
-        public Strategy(int player) {
+        public Strategy(int player, int currentGame) {
             this.player = player;
+            this.currentGame = currentGame;
             msg.what = player;
         }
     }
@@ -167,15 +176,15 @@ public class MainActivity extends AppCompatActivity {
     // Strategy focussed on victory
     public class StrategyOffensive extends Strategy implements Runnable {
 
-        public StrategyOffensive(int player) {
-            super(player);
+        public StrategyOffensive(int player, int currentGame) {
+            super(player, currentGame);
         }
 
         @Override
         public void run() {
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -202,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 if(piecesInBoard == 0){
                     boardStatus[possibleMoves.get(0)[0]][possibleMoves.get(0)[1]] = player;
                     msg = mHandler.obtainMessage(player);
+                    msg.arg1 = currentGame;
                     mHandler.sendMessage(msg);
                     return;
                 }
@@ -240,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (boardUpdatedFlag){
                         msg = mHandler.obtainMessage(player);
+                        msg.arg1 = currentGame;
                         mHandler.sendMessage(msg);
                         return;
                     }
@@ -274,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
 //                    }
                     if (boardUpdatedFlag){
                         msg = mHandler.obtainMessage(player);
+                        msg.arg1 = currentGame;
                         mHandler.sendMessage(msg);
                         return;
                     }
@@ -281,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     // If unable to find an adjacent position, use any free position
                     boardStatus[possibleMoves.get(0)[0]][possibleMoves.get(0)[1]] = player;
                     msg = mHandler.obtainMessage(player);
+                    msg.arg1 = currentGame;
                     mHandler.sendMessage(msg);
                     return;
                 }
@@ -292,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!pieceAdded)
                         boardStatus[possibleMoves.get(0)[0]][possibleMoves.get(0)[1]] = player;
                     msg = mHandler.obtainMessage(player);
+                    msg.arg1 = currentGame;
                     mHandler.sendMessage(msg);
                     return;
                 }
@@ -307,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
                                 positionToRemove.remove(existingPieces.get(j));
                                 boardStatus[positionToRemove.get(0)[0]][positionToRemove.get(0)[1]] = 0;
                                 msg = mHandler.obtainMessage(player);
+                                msg.arg1 = currentGame;
                                 mHandler.sendMessage(msg);
                                 return;
                             }
@@ -317,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
                     boardStatus[possibleMoves.get(0)[0]][possibleMoves.get(0)[1]] = player;
                     boardStatus[existingPieces.get(0)[0]][existingPieces.get(0)[1]] = 0;
                     msg = mHandler.obtainMessage(player);
+                    msg.arg1 = currentGame;
                     mHandler.sendMessage(msg);
                     return;
                 }
@@ -349,15 +365,15 @@ public class MainActivity extends AppCompatActivity {
     // Strategy focussed on defending/preventing the other player from winning
     public class StrategyRandom extends Strategy implements Runnable {
 
-        public StrategyRandom(int player) {
-            super(player);
+        public StrategyRandom(int player, int currentGame) {
+            super(player, currentGame);
         }
 
         @Override
         public void run() {
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -390,6 +406,7 @@ public class MainActivity extends AppCompatActivity {
                 index = randomGenerator.nextInt(possibleMoves.toArray().length);
                 boardStatus[possibleMoves.get(index)[0]][possibleMoves.get(index)[1]] = player;
                 msg = mHandler.obtainMessage(player);
+                msg.arg1 = currentGame;
                 mHandler.sendMessage(msg);
                 return;
             }
